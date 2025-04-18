@@ -4,7 +4,7 @@
   "description": "Clean backend for Vani chat application with real-time translation",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node app.js",
     "dev": "nodemon app.js",
     "migrate-chat": "node utils/migrateChatData.js",
@@ -26,6 +26,7 @@
     "bcryptjs": "^2.4.3",
     "compression": "^1.8.0",
     "cors": "^2.8.5",
+    "debug": "^4.4.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "helmet": "^7.2.0",

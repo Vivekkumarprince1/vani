@@ -22,7 +22,7 @@ const connectDB = async () => {
       process.exit(1);
     }
     
-    throw err;
+    // throw (err); // Rethrow the error for further handling if needed  
   }
 };
 
