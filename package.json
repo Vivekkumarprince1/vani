@@ -7,14 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "migrate-chat": "node utils/migrateChatData.js",
-    "migrate-users": "node utils/migrateUserData.js",
+
     "lint": "eslint .",
-    "build": "echo 'Backend build process complete'",
+    "build": "npm install",
     "postinstall": "npm run build"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": "18.x"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +27,7 @@
     "cors": "^2.8.5",
     "debug": "^4.4.0",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^5.1.0",
     "helmet": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.43.1",
