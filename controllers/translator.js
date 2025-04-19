@@ -1,27 +1,34 @@
 const axios = require('axios');
 
 // Get supported languages
+const AZURE_TRANSLATOR_KEY = process.env.AZURE_TRANSLATOR_KEY;
+const AZURE_TRANSLATOR_REGION = process.env.AZURE_TRANSLATOR_REGION;
+const AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com';
+
+// Get supported languages from Azure Translator
 exports.getLanguages = async (req, res) => {
     try {
-        const languages = {
-            "en": { "name": "English", "nativeName": "English", "dir": "ltr" },
-            "es": { "name": "Spanish", "nativeName": "Español", "dir": "ltr" },
-            "fr": { "name": "French", "nativeName": "Français", "dir": "ltr" },
-            "de": { "name": "German", "nativeName": "Deutsch", "dir": "ltr" },
-            "it": { "name": "Italian", "nativeName": "Italiano", "dir": "ltr" },
-            "ja": { "name": "Japanese", "nativeName": "日本語", "dir": "ltr" },
-            "ko": { "name": "Korean", "nativeName": "한국어", "dir": "ltr" },
-            "pt": { "name": "Portuguese", "nativeName": "Português", "dir": "ltr" },
-            "ru": { "name": "Russian", "nativeName": "Русский", "dir": "ltr" },
-            "zh-Hans": { "name": "Chinese (Simplified)", "nativeName": "中文 (简体)", "dir": "ltr" },
-            "ar": { "name": "Arabic", "nativeName": "العربية", "dir": "rtl" },
-            "hi": { "name": "Hindi", "nativeName": "हिन्दी", "dir": "ltr" }
-        };
+        const response = await axios.get(`${AZURE_TRANSLATOR_ENDPOINT}/languages?api-version=3.0`, {
+            headers: {
+                'Ocp-Apim-Subscription-Key': AZURE_TRANSLATOR_KEY,
+                'Ocp-Apim-Subscription-Region': AZURE_TRANSLATOR_REGION
+            }
+        });
+
+        // Filter and format the languages
+        const languages = {};
+        Object.entries(response.data.translation).forEach(([code, details]) => {
+            languages[code] = {
+                name: details.name,
+                nativeName: details.nativeName,
+                dir: details.dir
+            };
+        });
 
         res.json(languages);
     } catch (error) {
-        console.error('Error fetching languages:', error);
-        res.status(500).json({ error: 'Failed to fetch languages' });
+        console.error('Error fetching languages from Azure:', error);
+        res.status(500).json({ error: 'Failed to fetch languages from Azure Translator' });
     }
 };
 
