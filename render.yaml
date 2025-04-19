@@ -5,7 +5,5 @@ services:
     buildCommand: npm install
     startCommand: node app.js
     envVars:
-      - key: NODE_ENV
-        value: production
       - key: NODE_VERSION
-        value: 18.x
+        value: 20.x
