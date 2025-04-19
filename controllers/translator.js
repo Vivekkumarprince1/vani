@@ -1,10 +1,8 @@
 const axios = require('axios');
-const translate = require('@vitalets/google-translate-api');
 
 // Get supported languages
 exports.getLanguages = async (req, res) => {
     try {
-        // This is a simplified languages list for demonstration
         const languages = {
             "en": { "name": "English", "nativeName": "English", "dir": "ltr" },
             "es": { "name": "Spanish", "nativeName": "Español", "dir": "ltr" },
@@ -27,7 +25,7 @@ exports.getLanguages = async (req, res) => {
     }
 };
 
-// Translate text using Google Translate API
+// Translate text using Azure Translator
 exports.translateText = async (req, res) => {
     try {
         const { text, targetLanguage } = req.body;
@@ -36,22 +34,33 @@ exports.translateText = async (req, res) => {
             return res.status(400).json({ error: 'Text and target language are required' });
         }
 
-        // Convert from Azure format (zh-Hans) to Google format (zh-CN) if needed
-        let googleLanguageCode = targetLanguage;
-        if (targetLanguage === 'zh-Hans') {
-            googleLanguageCode = 'zh-CN';
-        } else if (targetLanguage === 'zh-Hant') {
-            googleLanguageCode = 'zh-TW';
-        }
+        const subscriptionKey = process.env.AZURE_TRANSLATOR_KEY;
+        const endpoint = process.env.AZURE_TRANSLATOR_ENDPOINT; // e.g., https://api.cognitive.microsofttranslator.com
+        const region = process.env.AZURE_TRANSLATOR_REGION;     // e.g., eastus
 
-        const result = await translate(text, { to: googleLanguageCode });
+        const response = await axios({
+            baseURL: `${endpoint}/translate`,
+            method: 'post',
+            params: {
+                'api-version': '3.0',
+                'to': targetLanguage
+            },
+            headers: {
+                'Ocp-Apim-Subscription-Key': subscriptionKey,
+                'Ocp-Apim-Subscription-Region': region,
+                'Content-type': 'application/json'
+            },
+            data: [{ Text: text }]
+        });
+
+        const translatedText = response.data[0]?.translations[0]?.text;
 
         res.json({
-            text: result.text,
+            text: translatedText,
             to: targetLanguage
         });
     } catch (error) {
-        console.error('Error translating text:', error);
+        console.error('Error translating text:', error.response?.data || error.message);
         res.status(500).json({ error: 'Failed to translate text' });
     }
-}; 
+};

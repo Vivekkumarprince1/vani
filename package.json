@@ -4,16 +4,16 @@
   "description": "Clean backend for Vani chat application with real-time translation",
   "main": "app.js",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 0",
-  "start": "node app.js",
-  "dev": "nodemon app.js",
-  "lint": "eslint .",
-  "build": "echo \"Build complete\"",
-  "postinstall": "npm run build"
-},
-
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "eslint .",
+    "build": "echo \"Build complete\"",
+    "postinstall": "npm run build"
+  },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
   "dependencies": {
     "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
+    "common": "^0.2.5",
     "compression": "^1.8.0",
     "cors": "^2.8.5",
     "debug": "^4.4.0",
